@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@hospital.com",
+      "password": "admin123"
+    }
+  ],
+  "patients": [
+    {
+      "id": "PAT-4alxaDG5",
+      "name": "Test Male",
+      "email": "test@test.com",
+      "age": "25",
+      "gender": "Male",
+      "disease": "Flu",
+      "date": "2026-06-17",
+      "phoneNo": "9864637676",
+      "bloodGroup": "A+",
+      "roomNo": "201",
+      "photo": "file:///data/user/0/com.hospital.app/cache/ImagePicker/da15d2e7-dc4f-4f59-89ca-0630d268dc69.jpeg"
+    },
+    {
+      "id": "PAT-tO6dam7V",
+      "name": "Test Female",
+      "email": "test@test.com",
+      "age": "25",
+      "gender": "Female",
+      "disease": "Cold",
+      "date": "2026-06-17",
+      "phoneNo": "8864664949",
+      "bloodGroup": "B+",
+      "roomNo": "202",
+      "photo": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FDay36-0eaf758f-9b09-48ba-8b7a-a89cbc08f469/ImagePicker/3fec6b0e-95c5-445c-819a-2eddd6853c61.jpeg"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "DOC-4uM7YyeO",
+      "name": "Raj",
+      "email": "raj@hospital.com",
+      "specialization": "Surgery",
+      "experience": "10",
+      "department": "Surgery",
+      "qualification": "MBBS",
+      "phoneNo": "9876160351",
+      "photo": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FDay36-0eaf758f-9b09-48ba-8b7a-a89cbc08f469/ImagePicker/dd81bb0d-6b3c-4bab-af58-2718da939433.jpeg"
+    },
+    {
+      "id": "DOC-jZbhXXxK",
+      "name": "Test",
+      "email": "test@hospital.com",
+      "specialization": "Test",
+      "experience": "5",
+      "department": "Test ",
+      "qualification": "Test",
+      "phoneNo": "9464376181",
+      "photo": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FDay36-0eaf758f-9b09-48ba-8b7a-a89cbc08f469/ImagePicker/f0b7134a-c9c0-40a7-b173-5537c2c3e30f.jpeg"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "APT-G0Y-vs9g",
+      "patient": "Test",
+      "doctor": "Test",
+      "date": "2026-06-17",
+      "time": "17:23",
+      "status": "Scheduled"
+    },
+    {
+      "id": "APT-7Y0J196J",
+      "patient": "Soham",
+      "doctor": "Raj",
+      "date": "2026-06-17",
+      "time": "17:30",
+      "status": "Scheduled"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
