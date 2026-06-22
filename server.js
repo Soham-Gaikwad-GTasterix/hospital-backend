@@ -79,247 +79,197 @@ app.post(
     }
 );
 
-app.get(
-    "/doctors",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        res.json(db.doctors);
-    }
-);
-
-app.post(
-    "/doctors",
-    (req, res) => {
-        
-        const doctor = req.body;
-
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-
-        db.doctors.push(doctor);
-
-        fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
-
-        res
-            .status(201)
-            .json(doctor);
-    }
-);
-
-app.get(
-    "/appointments",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        res.json(db.appointments);
-    }
-);
-
-app.post(
-    "/appointments",
-    (req, res) => {
-        
-        const appointment = req.body;
-
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-
-        db.appointments.push(appointment);
-
-        fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
-
-        res
-            .status(201)
-            .json(appointment);
-    }
-);
-
-app.delete(
-    "/patients/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        db.patients = db.patients.filter(
-            patient => patient.id !== req.params.id
-        );
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json({
-            message: "Patient Deleted"
-        });
-    }
-);
-
-app.delete(
-    "/doctors/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        db.doctors = db.doctors.filter(
-            doctor => doctor.id !== req.params.id
-        );
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json({
-            message: "Doctor Deleted"
-        });
-    }
-);
-
-app.delete(
-    "/appointments/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        db.appointments = db.appointments.filter(
-            appointment => appointment.id !== req.params.id
-        );
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json({
-            message: "Appointment Deleted"
-        });
-    }
-);
-
 app.put(
     "/patients/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        const index = db.patients.findIndex(
-            patient => patient.id === req.params.id
-        );
-        if (
-            index === -1
-        ) {
-            return res
-                .status(404)
-                .json({
+    async (req, res) => {
+        try {
+            const patients = await Patient.findOneAndUpdate(
+                { id: req.params.id },
+                req.body,
+                { new: true },
+            );
+            if (!patients) {
+                return res.status(404).json({
                     message: "Patient not found"
                 });
+            }
+            res.json(patient);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
         }
-        db.patients[index] =
-        {
-            ...db.patients[index],
-            ...req.body
-        };
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json(db.patients[index]);
+    }
+);
+
+app.delete(
+    "/patients/:id",
+    async (req, res) => {
+        try {
+            const patients = await Patient.findOneAndDelete(
+                { id: req.params.id }
+            );
+            if (!patients) {
+                return res.status(404).json({
+                    message: "Patient not found"
+                });
+            }
+            res.json({
+                message: "Patient Deleted"
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.get(
+    "/doctors",
+    async (req, res) => {
+        try {
+            const doctors = await Doctor.find();
+            res.json(doctors);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.post(
+    "/doctors",
+    async (req, res) => {
+        try {
+            const doctors = await Doctor.create(req.body);
+            res.status(201).json(doctors);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     }
 );
 
 app.put(
     "/doctors/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        const index = db.doctors.findIndex(
-            doctor => doctor.id === req.params.id
-        );
-        if (
-            index === -1
-        ) {
-            return res
-                .status(404)
-                .json({
+    async (req, res) => {
+        try {
+            const doctors = await Doctor.findOneAndUpdate(
+                { id: req.params.id },
+                req.body,
+                { new: true },
+            );
+            if (!doctors) {
+                return res.status(404).json({
                     message: "Doctor not found"
                 });
+            }
+            res.json(doctor);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
         }
-        db.doctors[index] =
-        {
-            ...db.doctors[index],
-            ...req.body
-        };
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json(db.doctors[index]);
+    }
+);
+
+app.delete(
+    "/doctors/:id",
+    async (req, res) => {
+        try {
+            const doctors = await Doctor.findOneAndDelete(
+                { id: req.params.id }
+            );
+            if (!doctors) {
+                return res.status(404).json({
+                    message: "Doctor not found"
+                });
+            }
+            res.json({
+                message: "Doctor Deleted"
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.get(
+    "/appointments",
+    async (req, res) => {
+        try {
+            const appointments = await Appointment.find();
+            res.json(appointments);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.post(
+    "/appointments",
+    async (req, res) => {
+        try {
+            const appointments = await Appointment.create(req.body);
+            res.status(201).json(appointments);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     }
 );
 
 app.put(
     "/appointments/:id",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        const index = db.appointments.findIndex(
-            appointment => appointment.id === req.params.id
-        );
-        if (
-            index === -1
-        ) {
-            return res
-                .status(404)
-                .json({
+    async (req, res) => {
+        try {
+            const appointments = await Appointment.findOneAndUpdate(
+                { id: req.params.id },
+                req.body,
+                { new: true },
+            );
+            if (!appointments) {
+                return res.status(404).json({
+                    message: "Appointments not found"
+                });
+            }
+            res.json(appointments);
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.delete(
+    "/appointments/:id",
+    async (req, res) => {
+        try {
+            const appointments = await Appointment.findOneAndDelete(
+                { id: req.params.id }
+            );
+            if (!appointments) {
+                return res.status(404).json({
                     message: "Appointment not found"
                 });
+            }
+            res.json({
+                message: "Appointment Deleted"
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
         }
-        db.appointments[index] =
-        {
-            ...db.appointments[index],
-            ...req.body
-        };
-        fs.writeFileSync(
-            dbPath,
-            JSON.stringify(
-                db,
-                null,
-                2
-            )
-        );
-        res.json(db.appointments[index]);
     }
 );
 
