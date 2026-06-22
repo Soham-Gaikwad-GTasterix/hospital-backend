@@ -15,7 +15,7 @@ const doctorSchema = new mongoose.Schema(
         specialization: String,
         experience: String,
         department: String,
-        qualifiation: String,
+        qualification: String,
         phoneNo: String,
         photo: String
     },
