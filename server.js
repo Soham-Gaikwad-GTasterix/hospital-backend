@@ -8,6 +8,8 @@ const Doctor = require("./models/Doctor");
 
 const Appointment = require("./models/Appointment");
 
+const User = require("./models/User");
+
 const express = require("express");
 
 const cors = require("cors");
@@ -26,30 +28,55 @@ app.use(express.json());
 
 const SECRET = "hospital-secret";
 
-app.post("/login", (req, res) => {
-    const {
-        email,
-        password
-    } = req.body;
+app.post(
+    "/login",
+    async (req, res) => {
+        try {
+            const {
+                email,
+                password,
+            } = req.body;
+            const user = await User.findOne({email});
+            if (!user) {
+                return res.status(401).json({
+                    message: "Invalid Credentials"
+                });
+            }
+            if (user.password !== password) {
+                return res.status(401).json({
+                    message: "Invalid Credentials"
+                });
+            }
 
-    if (
-        email === "admin@hospital.com" &&
-        password === "admin123"
-    ) {
-        const token = jwt.sign(
-            { email },
-            SECRET,
-            { expiresIn: "7d" } 
-        );
-        return res.json({
-            token
-        });
+            const token = jwt.sign(
+                {
+                    id: user._id,
+                    email: user.email,
+                    role: user.role,
+                    doctorId: user.doctorId
+                },
+                SECRET,
+                {
+                    expiresIn: "7d"
+                }
+            );
+            res.json({
+                token,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    doctorId: user.doctorId
+                }
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     }
-
-    return res.status(401).json({
-        message: "Invalid Credentials"
-    });
-});
+);
 
 app.get(
     "/patients",
