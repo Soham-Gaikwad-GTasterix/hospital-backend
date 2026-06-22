@@ -1,6 +1,12 @@
-const fs = require("fs");
+require("dotenv").config();
 
-const path = require("path");
+const connectDB = require("./config/db");
+
+const Patient = require("./models/Patient");
+
+const Doctor = require("./models/Doctor");
+
+const Appointment = require("./models/Appointment");
 
 const express = require("express");
 
@@ -12,19 +18,13 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+connectDB();
+
 app.use(cors());
 
 app.use(express.json());
 
 const SECRET = "hospital-secret";
-
-const dbPath = path.join(__dirname, "db.json");
-
-let patients = [];
-
-let doctors = [];
-
-let appointments = [];
 
 app.post("/login", (req, res) => {
     const {
@@ -53,33 +53,29 @@ app.post("/login", (req, res) => {
 
 app.get(
     "/patients",
-    (req, res) => {
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-        res.json(db.patients);
+    async (req, res) => {
+        try {
+            const patients = await Patient.find();
+            res.json(patient);
+        } catch (error) {
+            res.status(500).json({
+                essage: error.message
+            });
+        }
     }
 );
 
 app.post(
     "/patients",
-    (req, res) => {
-        
-        const patient = req.body;
-
-        const db = JSON.parse(fs.readFileSync(
-            dbPath,
-            "utf8"
-        ));
-
-        db.patients.push(patient);
-
-        fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
-
-        res
-            .status(201)
-            .json(patient);
+    async (req, res) => {
+        try {
+            const patient = await Patient.create(req.body);
+            res.status(201).json(patient);
+        } catch (error) {
+            res.status(500).json({
+                essage: error.message
+            });
+        }
     }
 );
 
