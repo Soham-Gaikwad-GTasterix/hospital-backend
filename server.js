@@ -56,10 +56,10 @@ app.get(
     async (req, res) => {
         try {
             const patients = await Patient.find();
-            res.json(patient);
+            res.json(patients);
         } catch (error) {
             res.status(500).json({
-                essage: error.message
+                message: error.message
             });
         }
     }
@@ -69,11 +69,11 @@ app.post(
     "/patients",
     async (req, res) => {
         try {
-            const patient = await Patient.create(req.body);
-            res.status(201).json(patient);
+            const patients = await Patient.create(req.body);
+            res.status(201).json(patients);
         } catch (error) {
             res.status(500).json({
-                essage: error.message
+                message: error.message
             });
         }
     }

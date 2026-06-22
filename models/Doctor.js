@@ -4,12 +4,12 @@ const doctorSchema = new mongoose.Schema(
     {
         id: {
             type: String,
-            require: true,
+            required: true,
             unique: true
         },
         name: {
             type: String,
-            require: true
+            required: true
         },
         email: String,
         specialization: String,

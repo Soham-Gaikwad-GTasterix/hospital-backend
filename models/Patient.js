@@ -4,12 +4,12 @@ const patientSchema = new mongoose.Schema(
     {
         id: {
             type: String,
-            require: true,
+            required: true,
             unique: true
         },
         name: {
             type: String,
-            require: true
+            required: true
         },
         email: String,
         age: String,

@@ -4,16 +4,16 @@ const appointmentSchema = new mongoose.Schema(
     {
         id: {
             type: String,
-            require: true,
+            required: true,
             unique: true
         },
         patient: {
             type: String,
-            require: true
+            required: true
         },
         doctor: {
             type: String,
-            require: true
+            required: true
         },
         date: String,
         time: String,
