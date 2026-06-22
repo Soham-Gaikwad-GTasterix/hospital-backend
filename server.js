@@ -193,6 +193,7 @@ app.post(
 
             res.status(201).json(doctors);
         } catch (error) {
+            console.log("Doctor create error:", error);
             res.status(500).json({
                 message: error.message
             });
