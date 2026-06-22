@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const bcrypt = require("bcryptjs");
+
 const connectDB = require("./config/db");
 
 const Patient = require("./models/Patient");
@@ -42,7 +44,11 @@ app.post(
                     message: "Invalid Credentials"
                 });
             }
-            if (user.password !== password) {
+            const isMatch = await bcrypt.compare(
+                password,
+                user.password
+            );
+            if (isMatch) {
                 return res.status(401).json({
                     message: "Invalid Credentials"
                 });
@@ -172,10 +178,15 @@ app.post(
         try {
             const doctors = await Doctor.create(req.body);
 
+            const hashedPassword = await bcrypt.hash(
+                req.body.password,
+                10
+            );
+
             await User.create({
                 name: req.body.name,
                 email: req.nody.email,
-                password: req.body.password,
+                password: hashedPassword,
                 role: "doctor",
                 doctorId: req.body.id
             });
@@ -203,16 +214,26 @@ app.put(
                     message: "Doctor not found"
                 });
             }
+
+            const updateData = {
+                name: req.body.name,
+                email: req.body.email
+            };
+
+            if (req.body.password) {
+                updateData.password = await bcrypt.hash(
+                    req.body.password,
+                    10
+                );
+            }
+
             await User.findOneAndUpdate(
                 {
                     doctorId: req.params.id
                 },
-                {
-                    name: req.body.name,
-                    email: req.nody.email,
-                    password: req.body.password
-                }
+                updateData
             );
+
             res.json(doctors);
         } catch (error) {
             res.status(500).json({
