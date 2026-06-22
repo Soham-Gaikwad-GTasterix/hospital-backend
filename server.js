@@ -185,7 +185,7 @@ app.post(
 
             await User.create({
                 name: req.body.name,
-                email: req.nody.email,
+                email: req.body.email,
                 password: hashedPassword,
                 role: "doctor",
                 doctorId: req.body.id
@@ -193,7 +193,6 @@ app.post(
 
             res.status(201).json(doctors);
         } catch (error) {
-            console.log("Doctor create error:", error);
             res.status(500).json({
                 message: error.message
             });
