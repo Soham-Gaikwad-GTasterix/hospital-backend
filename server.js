@@ -171,6 +171,15 @@ app.post(
     async (req, res) => {
         try {
             const doctors = await Doctor.create(req.body);
+
+            await User.create({
+                name: req.body.name,
+                email: req.nody.email,
+                password: req.body.password,
+                role: "doctor",
+                doctorId: req.body.id
+            });
+
             res.status(201).json(doctors);
         } catch (error) {
             res.status(500).json({
@@ -194,6 +203,16 @@ app.put(
                     message: "Doctor not found"
                 });
             }
+            await User.findOneAndUpdate(
+                {
+                    doctorId: req.params.id
+                },
+                {
+                    name: req.body.name,
+                    email: req.nody.email,
+                    password: req.body.password
+                }
+            );
             res.json(doctors);
         } catch (error) {
             res.status(500).json({
@@ -215,6 +234,9 @@ app.delete(
                     message: "Doctor not found"
                 });
             }
+            await User.findOneAndDelete({
+                doctorId: req.params.id
+            });
             res.json({
                 message: "Doctor Deleted"
             });

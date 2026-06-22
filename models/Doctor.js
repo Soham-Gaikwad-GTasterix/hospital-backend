@@ -11,7 +11,15 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        email: String,
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        },
         specialization: String,
         experience: String,
         department: String,
