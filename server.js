@@ -93,7 +93,7 @@ app.put(
                     message: "Patient not found"
                 });
             }
-            res.json(patient);
+            res.json(patients);
         } catch (error) {
             res.status(500).json({
                 message: error.message
@@ -167,7 +167,7 @@ app.put(
                     message: "Doctor not found"
                 });
             }
-            res.json(doctor);
+            res.json(doctors);
         } catch (error) {
             res.status(500).json({
                 message: error.message
