@@ -276,7 +276,7 @@ app.delete(
 const startServer = async () => {
     await connectDB();
     app.listen(PORT, () => {
-        console.log(`Server running on port ${port}`);
+        console.log(`Server running on port ${PORT}`);
     })
 };
 
