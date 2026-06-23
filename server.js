@@ -26,7 +26,7 @@ app.use(cors());
 
 app.use(express.json());
 
-const SECRET = procss.env.JWT_SECRET;
+const SECRET = process.env.JWT_SECRET;
 
 app.post(
     "/login",
