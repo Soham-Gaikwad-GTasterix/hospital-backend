@@ -22,8 +22,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-connectDB();
-
 app.use(cors());
 
 app.use(express.json());
@@ -48,7 +46,7 @@ app.post(
                 password,
                 user.password
             );
-            if (isMatch) {
+            if (!isMatch) {
                 return res.status(401).json({
                     message: "Invalid Credentials"
                 });
