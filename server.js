@@ -28,7 +28,7 @@ app.use(cors());
 
 app.use(express.json());
 
-const SECRET = "hospital-secret";
+const SECRET = procss.env.JWT_SECRET;
 
 app.post(
     "/login",
