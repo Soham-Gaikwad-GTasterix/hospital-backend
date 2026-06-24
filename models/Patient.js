@@ -18,6 +18,14 @@ const patientSchema = new mongoose.Schema(
         date: String,
         phoneNo: String,
         bloodGroup: String,
+        doctorName: {
+            type: String,
+            required: true
+        },
+        doctorId: {
+            type: String,
+            required: true
+        },
         roomNo: String,
         photo: String
     },
