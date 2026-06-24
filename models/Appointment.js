@@ -15,6 +15,10 @@ const appointmentSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        doctorId: {
+            type: String,
+            required: true
+        },
         date: String,
         time: String,
         status: {
