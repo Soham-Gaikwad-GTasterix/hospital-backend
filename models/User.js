@@ -17,12 +17,28 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            emum: ["admin", "doctor"],
-            default: "doctor"
+            emum: ["admin", "doctor", "patient"],
+            default: "patient"
         },
         doctorId: {
             type: String,
             default: null
+        },
+        age: {
+            type: String,
+            default: ""
+        },
+        gender: {
+            type: String,
+            default: ""
+        },
+        phoneNo: {
+            type: String,
+            default: ""
+        },
+        bloodGroup: {
+            type: String,
+            default: ""
         }
     },
     {

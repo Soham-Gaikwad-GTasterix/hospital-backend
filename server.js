@@ -71,8 +71,46 @@ app.post(
                     name: user.name,
                     email: user.email,
                     role: user.role,
-                    doctorId: user.doctorId
+                    doctorId: user.doctorId,
+                    age: user.age,
+                    gender: user.gender,
+                    phoneNo: user.phoneNo,
+                    bloodGroup: user.bloodGroup
                 }
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+app.post(
+    "/register",
+    async (req, res) => {
+        try {
+            const existingUser = await User.findOne({
+                email: req.body.email
+            });
+            if (existingUser) {
+                return res.status(400).json({
+                    message: "Email already registered"
+                });
+            }
+            const hashedPassword = await User.create({
+                name: req.body.name,
+                email: req.body.email,
+                password: hashedPassword,
+                role: "patient",
+                age: req.body.age,
+                gender: req.body.gender,
+                phoneNo: req.body.phoneNo,
+                bloodGroup: req.body.bloodGroup
+            });
+            res.status(201).json({
+                message: "Registration Successful",
+                user
             });
         } catch (error) {
             res.status(500).json({
