@@ -98,6 +98,10 @@ app.post(
                     message: "Email already registered"
                 });
             }
+            const hashedPassword = await bcrypt.hash(
+                req.body.password,
+                10
+            );
             const hashedPassword = await User.create({
                 name: req.body.name,
                 email: req.body.email,
