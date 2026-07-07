@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
     {
+        patientUserId: {
+            type: String,
+            default: null
+        },
         name: {
             type: String,
             required: true
@@ -17,7 +21,11 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            emum: ["admin", "doctor", "patient"],
+            enum: [
+                "admin", 
+                "doctor", 
+                "patient"
+            ],
             default: "patient"
         },
         doctorId: {
@@ -37,6 +45,10 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
         bloodGroup: {
+            type: String,
+            default: ""
+        },
+        photo: {
             type: String,
             default: ""
         }

@@ -22,6 +22,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+const { nanoid } = require("nanoid");
+
 app.use(cors());
 
 app.use(express.json());
@@ -57,7 +59,8 @@ app.post(
                     id: user._id,
                     email: user.email,
                     role: user.role,
-                    doctorId: user.doctorId
+                    doctorId: user.doctorId,
+                    patientUserId: user.patientUserId
                 },
                 SECRET,
                 {
@@ -68,6 +71,7 @@ app.post(
                 token,
                 user: {
                     id: user._id,
+                    patientUserId: user.patientUserId,
                     name: user.name,
                     email: user.email,
                     role: user.role,
@@ -75,7 +79,8 @@ app.post(
                     age: user.age,
                     gender: user.gender,
                     phoneNo: user.phoneNo,
-                    bloodGroup: user.bloodGroup
+                    bloodGroup: user.bloodGroup,
+                    photo: user.photo
                 }
             });
         } catch (error) {
@@ -102,7 +107,9 @@ app.post(
                 req.body.password,
                 10
             );
+            const patientUserId = `USR-${nanoid(8)}`;
             const user = await User.create({
+                patientUserId,
                 name: req.body.name,
                 email: req.body.email,
                 password: hashedPassword,
@@ -120,6 +127,33 @@ app.post(
             res.status(500).json({
                 message: error.message
             });
+        }
+    }
+);
+
+app.get(
+    "/users/:patientUserId",
+    async (req, res) => {
+        try {
+
+            const user = await User.findOne({
+                patientUserId: req.params.patientUserId
+            });
+
+            if (!user) {
+                return res.status(404).json({
+                    message: "User not found"
+                });
+            }
+
+            res.json(user);
+
+        } catch (error) {
+
+            res.status(500).json({
+                message: error.message
+            });
+
         }
     }
 );
@@ -327,7 +361,22 @@ app.post(
     "/appointments",
     async (req, res) => {
         try {
-            const appointments = await Appointment.create(req.body);
+            const appointments = await Appointment.create({
+                id: req.body.id,
+                patientUserId: req.body.patientUserId,
+                patient: req.body.patient,
+                patientEmail: req.body.patientEmail,
+                age: req.body.age,
+                gender: req.body.gender,
+                phoneNo: req.body.phoneNo,
+                bloodGroup: req.body.bloodGroup,
+                photo: req.body.photo || "",
+                doctor: req.body.doctor,
+                doctorId: req.body.doctorId,
+                date: req.body.date,
+                time: req.body.time,
+                status: "Scheduled"
+            });
             res.status(201).json(appointments);
         } catch (error) {
             res.status(500).json({

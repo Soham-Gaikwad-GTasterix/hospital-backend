@@ -7,6 +7,14 @@ const patientSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
+        appointmentId: {
+            type: String,
+            required: true
+        },
+        patientUserId: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -14,10 +22,9 @@ const patientSchema = new mongoose.Schema(
         email: String,
         age: String,
         gender: String,
-        disease: String,
-        date: String,
         phoneNo: String,
         bloodGroup: String,
+        photo: String,
         doctorName: {
             type: String,
             required: true
@@ -26,8 +33,30 @@ const patientSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        roomNo: String,
-        photo: String
+        disease: {
+            type: String,
+            default: ""
+        },
+        roomNo: {
+            type: String,
+            default: ""
+        },
+        admissionDate: {
+            type: String,
+            default: ""
+        },
+        dischargeDate: {
+            type: String,
+            default: ""
+        },
+        status: {
+            type: String,
+            enum: [
+                "Admitted",
+                "Discharged"
+            ],
+            default: "Admitted"
+        }
     },
     {
         timestamps: true

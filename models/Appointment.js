@@ -7,9 +7,37 @@ const appointmentSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
+        patientUserId:{
+            type: String,
+            required: true
+        },
         patient: {
             type: String,
             required: true
+        },
+        patientEmail: {
+            type: String,
+            required: true
+        },
+        age: {
+            type: String,
+            default: ""
+        },
+        gender: {
+            type: String,
+            default: ""
+        },
+        phoneNo: {
+            type: String,
+            default: ""
+        },
+        bloodGroup: {
+            type: String,
+            default: ""
+        },
+        photo: {
+            type: String,
+            default: ""
         },
         doctor: {
             type: String,
@@ -19,10 +47,21 @@ const appointmentSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        date: String,
-        time: String,
+        date: {
+            type: String,
+            required: true
+        },
+        time: {
+            type: String,
+            required: true
+        },
         status: {
             type: String,
+            enum: [
+                "Scheduled",
+                "Completed",
+                "Cancelled"
+            ]
             default: "Scheduled"
         }
     },
