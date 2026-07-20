@@ -39,7 +39,15 @@ const patientSchema = new mongoose.Schema(
         },
         roomNo: {
             type: String,
-            default: ""
+            required: true,
+        },
+        roomType: {
+            type: String,
+            required: true,
+        },
+        bedNo: {
+            type: String,
+            default: "",
         },
         admissionDate: {
             type: String,
