@@ -8,14 +8,6 @@ const {
     sendPatientDischargedWhatsApp
 } = require("./services/whatsappService");
 
-const {
-    sendAppointmentEmail,
-    sendAppointmentCancelledEmail,
-    sendAppointmentCompletedEmail,
-    sendPatientAdmittedEmail,
-    sendPatientDischargedEmail
-} = require("./services/emailService");
-
 const bcrypt = require("bcryptjs");
 
 const connectDB = require("./config/db");
@@ -236,8 +228,6 @@ app.put(
 
             if (patient.status === "Discharged") {
                 await sendPatientDischargedWhatsApp(patient);
-
-                await sendPatientDischargedEmail(patient);
             }
 
             res.json(patient);
@@ -430,15 +420,6 @@ app.post(
                 phoneNo: appointment.phoneNo
             });
 
-            await sendAppointmentEmail({
-                id: appointment.id,
-                patient: appointment.patient,
-                patientEmail: appointment.patientEmail,
-                doctor: appointment.doctor,
-                date: appointment.date,
-                time: appointment.time
-            });
-
             res.status(201).json(
                 appointment
             );
@@ -484,15 +465,6 @@ app.put(
                     phoneNo: appointment.phoneNo
                 });
 
-                await sendAppointmentCancelledEmail({
-                    id: appointment.id,
-                    patient: appointment.patient,
-                    patientEmail: appointment.patientEmail,
-                    doctor: appointment.doctor,
-                    date: appointment.date,
-                    time: appointment.time
-                });
-
             }
 
             if (appointment.status === "Completed") {
@@ -505,8 +477,6 @@ app.put(
 
                     await sendPatientAdmittedWhatsApp(admittedPatient);
 
-                    await sendPatientAdmittedEmail(admittedPatient);
-
                 } else {
 
                     await sendAppointmentCompletedWhatsApp({
@@ -514,13 +484,6 @@ app.put(
                         patient: appointment.patient,
                         doctor: appointment.doctor,
                         phoneNo: appointment.phoneNo
-                    });
-
-                    await sendAppointmentCompletedEmail({
-                        id: appointment.id,
-                        patient: appointment.patient,
-                        patientEmail: appointment.patientEmail,
-                        doctor: appointment.doctor
                     });
 
                 }
