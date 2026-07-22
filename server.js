@@ -1,7 +1,8 @@
 require("dotenv").config();
 
 const {
-    sendAppointmentWhatsApp
+    sendAppointmentWhatsApp,
+    sendAppointmentCancelledWhatsApp
 } = require("./services/whatsappService");
 
 const bcrypt = require("bcryptjs");
@@ -428,21 +429,41 @@ app.put(
     "/appointments/:id",
     async (req, res) => {
         try {
-            const appointments = await Appointment.findOneAndUpdate(
-                { id: req.params.id },
-                req.body,
-                { new: true },
-            );
-            if (!appointments) {
+
+            const appointment =
+                await Appointment.findOneAndUpdate(
+                    { id: req.params.id },
+                    req.body,
+                    { new: true }
+                );
+
+            if (!appointment) {
                 return res.status(404).json({
-                    message: "Appointments not found"
+                    message: "Appointment not found"
                 });
             }
-            res.json(appointments);
+
+            if (appointment.status === "Cancelled") {
+
+                await sendAppointmentCancelledWhatsApp({
+                    id: appointment.id,
+                    patient: appointment.patient,
+                    doctor: appointment.doctor,
+                    date: appointment.date,
+                    time: appointment.time,
+                    phoneNo: appointment.phoneNo
+                });
+
+            }
+
+            res.json(appointment);
+
         } catch (error) {
+
             res.status(500).json({
                 message: error.message
             });
+
         }
     }
 );

@@ -91,6 +91,94 @@ Stay Healthy ❤️`
     }
 }
 
+async function sendAppointmentCancelledWhatsApp(appointment) {
+
+    try {
+
+        let phone = String(appointment.phoneNo).replace(/\D/g, "");
+
+        if (!phone.startsWith("91")) {
+            phone = `91${phone}`;
+        }
+
+        const response = await axios.post(
+            `https://graph.facebook.com/v23.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+            {
+                messaging_product: "whatsapp",
+                recipient_type: "individual",
+                to: phone,
+                type: "text",
+                text: {
+                    preview_url: false,
+                    body:
+`❌ APPOINTMENT CANCELLED
+
+Hello ${appointment.patient},
+
+Your appointment has been cancelled successfully.
+
+━━━━━━━━━━━━━━━━━━
+
+🆔 Appointment ID
+${appointment.id}
+
+👨‍⚕️ Doctor
+${appointment.doctor}
+
+📅 Date
+${appointment.date}
+
+🕒 Time
+${appointment.time}
+
+━━━━━━━━━━━━━━━━━━
+
+If this cancellation was accidental, you can book another appointment through the app.
+
+Thank you.
+`
+                }
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        console.log("==================================");
+        console.log("✅ Cancellation WhatsApp Sent");
+        console.log("To:", phone);
+        console.log("Message ID:", response.data.messages?.[0]?.id);
+        console.log("==================================");
+
+        return {
+            success: true,
+            data: response.data
+        };
+
+    } catch (error) {
+
+        console.log("==================================");
+        console.log("❌ Cancellation WhatsApp Failed");
+
+        console.log(
+            error.response?.data ||
+            error.message
+        );
+
+        console.log("==================================");
+
+        return {
+            success: false
+        };
+
+    }
+
+}
+
 module.exports = {
-    sendAppointmentWhatsApp
+    sendAppointmentWhatsApp,
+    sendAppointmentCancelledWhatsApp
 };
