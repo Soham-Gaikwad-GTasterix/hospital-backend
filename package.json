@@ -19,6 +19,7 @@
     "fs-extra": "^11.3.5",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.1",
-    "nanoid": "^5.1.16"
+    "nanoid": "^5.1.16",
+    "nodemailer": "^9.0.3"
   }
 }
