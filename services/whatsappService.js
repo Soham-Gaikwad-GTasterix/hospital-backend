@@ -326,9 +326,83 @@ We wish you a speedy recovery. ❤️`
 
 }
 
+async function sendPatientDischargedWhatsApp(patient) {
+
+    try {
+
+        let phone = String(patient.phoneNo).replace(/\D/g, "");
+
+        if (!phone.startsWith("91")) {
+            phone = `91${phone}`;
+        }
+
+        const response = await axios.post(
+            `https://graph.facebook.com/v23.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+            {
+                messaging_product: "whatsapp",
+                recipient_type: "individual",
+                to: phone,
+                type: "text",
+                text: {
+                    preview_url: false,
+                    body:
+`🏥 DISCHARGE CONFIRMATION
+
+Hello ${patient.name},
+
+You have been discharged successfully.
+
+━━━━━━━━━━━━━━━━━━
+
+🆔 Patient ID
+${patient.id}
+
+👨‍⚕️ Doctor
+${patient.doctorName}
+
+🏥 Ward
+${patient.roomType}
+
+🚪 Room
+${patient.roomNo}
+
+${patient.bedNo ? `🛏 Bed\n${patient.bedNo}\n\n` : ""}━━━━━━━━━━━━━━━━━━
+
+Please follow your doctor's instructions and prescribed medications.
+
+We wish you a speedy recovery. ❤️`
+                }
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+
+        return {
+            success: true,
+            data: response.data
+        };
+
+    } catch (error) {
+
+        console.log("❌ Discharge WhatsApp Failed");
+        console.log(error.response?.data || error.message);
+
+        return {
+            success: false
+        };
+
+    }
+
+}
+
 module.exports = {
     sendAppointmentWhatsApp,
     sendAppointmentCancelledWhatsApp,
     sendAppointmentCompletedWhatsApp,
-    sendPatientAdmittedWhatsApp
+    sendPatientAdmittedWhatsApp,
+    sendPatientDischargedWhatsApp
 };

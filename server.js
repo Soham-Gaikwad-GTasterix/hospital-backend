@@ -4,7 +4,8 @@ const {
     sendAppointmentWhatsApp,
     sendAppointmentCancelledWhatsApp,
     sendAppointmentCompletedWhatsApp,
-    sendPatientAdmittedWhatsApp
+    sendPatientAdmittedWhatsApp,
+    sendPatientDischargedWhatsApp
 } = require("./services/whatsappService");
 
 const bcrypt = require("bcryptjs");
@@ -212,17 +213,25 @@ app.put(
     "/patients/:id",
     async (req, res) => {
         try {
-            const patients = await Patient.findOneAndUpdate(
+
+            const patient = await Patient.findOneAndUpdate(
                 { id: req.params.id },
                 req.body,
-                { new: true },
+                { new: true }
             );
-            if (!patients) {
+
+            if (!patient) {
                 return res.status(404).json({
                     message: "Patient not found"
                 });
             }
-            res.json(patients);
+
+            if (patient.status === "Discharged") {
+                await sendPatientDischargedWhatsApp(patient);
+            }
+
+            res.json(patient);
+
         } catch (error) {
             res.status(500).json({
                 message: error.message
