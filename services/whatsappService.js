@@ -59,7 +59,8 @@ Stay Healthy ❤️`
         console.log("==================================");
         console.log("✅ WhatsApp Message Sent");
         console.log("To:", phone);
-        console.log("Message ID:", response.data.messages?.[0]?.id);
+        console.log("Full Response:");
+        console.log(JSON.stringify(response.data, null, 2));
         console.log("==================================");
 
         return {
@@ -70,6 +71,10 @@ Stay Healthy ❤️`
     } catch (error) {
 
         console.log("==================================");
+
+        console.log("Full Error:");
+        console.log(JSON.stringify(error.response?.data, null, 2));
+
         console.log("❌ WhatsApp Send Failed");
         console.log("Phone:", appointment.phoneNo);
 
