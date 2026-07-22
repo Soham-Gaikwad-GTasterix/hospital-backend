@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+const {
+    sendAppointmentWhatsApp
+} = require("./services/whatsappService");
+
 const bcrypt = require("bcryptjs");
 
 const connectDB = require("./config/db");
@@ -376,27 +380,46 @@ app.post(
     "/appointments",
     async (req, res) => {
         try {
-            const appointments = await Appointment.create({
-                id: req.body.id,
-                patientUserId: req.body.patientUserId,
-                patient: req.body.patient,
-                patientEmail: req.body.patientEmail,
-                age: req.body.age,
-                gender: req.body.gender,
-                phoneNo: req.body.phoneNo,
-                bloodGroup: req.body.bloodGroup,
-                photo: req.body.photo || "",
-                doctor: req.body.doctor,
-                doctorId: req.body.doctorId,
-                date: req.body.date,
-                time: req.body.time,
-                status: "Scheduled"
+
+            const appointment =
+                await Appointment.create({
+                    id: req.body.id,
+                    patientUserId: req.body.patientUserId,
+                    patient: req.body.patient,
+                    patientEmail: req.body.patientEmail,
+                    age: req.body.age,
+                    gender: req.body.gender,
+                    phoneNo: req.body.phoneNo,
+                    bloodGroup: req.body.bloodGroup,
+                    photo: req.body.photo || "",
+                    doctor: req.body.doctor,
+                    doctorId: req.body.doctorId,
+                    date: req.body.date,
+                    time: req.body.time,
+                    status: "Scheduled"
+                });
+
+            await sendAppointmentWhatsApp({
+                id: appointment.id,
+                patient: appointment.patient,
+                doctor: appointment.doctor,
+                date: appointment.date,
+                time: appointment.time,
+                phoneNo: appointment.phoneNo
             });
-            res.status(201).json(appointments);
+
+            res.status(201).json(
+                appointment
+            );
+
         } catch (error) {
+
+            console.log(error);
+
             res.status(500).json({
                 message: error.message
             });
+
         }
     }
 );
