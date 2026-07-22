@@ -2,7 +2,9 @@ require("dotenv").config();
 
 const {
     sendAppointmentWhatsApp,
-    sendAppointmentCancelledWhatsApp
+    sendAppointmentCancelledWhatsApp,
+    sendAppointmentCompletedWhatsApp,
+    sendPatientAdmittedWhatsApp
 } = require("./services/whatsappService");
 
 const bcrypt = require("bcryptjs");
@@ -453,6 +455,29 @@ app.put(
                     time: appointment.time,
                     phoneNo: appointment.phoneNo
                 });
+
+            }
+
+            if (appointment.status === "Completed") {
+
+                const admittedPatient = await Patient.findOne({
+                    appointmentId: appointment.id
+                });
+
+                if (admittedPatient) {
+
+                    await sendPatientAdmittedWhatsApp(admittedPatient);
+
+                } else {
+
+                    await sendAppointmentCompletedWhatsApp({
+                        id: appointment.id,
+                        patient: appointment.patient,
+                        doctor: appointment.doctor,
+                        phoneNo: appointment.phoneNo
+                    });
+
+                }
 
             }
 
