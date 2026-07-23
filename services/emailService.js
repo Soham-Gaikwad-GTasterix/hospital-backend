@@ -6,6 +6,9 @@ const transporter = nodemailer.createTransport({
     secure: false,
     requireTLS: true,
     family:4,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -25,6 +28,7 @@ async function sendAppointmentEmail(appointment) {
 
     try {
 
+        console.log("Before sendMail");
         console.log("EMAIL_USER:",process.env.EMAIL_USER);
         console.log("EMAIL_PASS loded:", !! process.env.EMAIL_PASS);
         console.log("Recipient:",appointment.patientEmail);
@@ -90,6 +94,8 @@ async function sendAppointmentEmail(appointment) {
             `
 
         });
+
+        console.log("After sendMail");
 
         console.log("==================================");
         console.log("✅ Appointment Email Sent");
