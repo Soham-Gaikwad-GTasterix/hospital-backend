@@ -1,47 +1,37 @@
-const nodemailer = require("nodemailer");
+const brevo = require("@getbrevo/brevo");
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    family:4,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
+const apiInstance = new brevo.TransactionalEmailsApi();
 
-transporter.verify((error) => {
-    if (error) {
-        console.log("❌ Email Service Error");
-        console.log(error);
-    } else {
-        console.log("✅ Email Service Ready");
-    }
-});
+apiInstance.setApiKey(
+    brevo.TransactionalEmailsApiApiKeys.apiKey,
+    process.env.BREVO_API_KEY
+);
+
+console.log("✅ Brevo Email Service Ready");
 
 async function sendAppointmentEmail(appointment) {
 
     try {
 
-        console.log("Before sendMail");
-        console.log("EMAIL_USER:",process.env.EMAIL_USER);
-        console.log("EMAIL_PASS loded:", !! process.env.EMAIL_PASS);
-        console.log("Recipient:",appointment.patientEmail);
+        await apiInstance.sendTransacEmail({
 
-        const info = await transporter.sendMail({
+            sender: {
+                name: "Hospital Management System",
 
-            from: process.env.EMAIL_USER,
+                email: process.env.EMAIL_USER
+            },
 
-            to: appointment.patientEmail,
+            to: [
+                {
+                    email: appointment.patientEmail,
+
+                    name: appointment.patient
+                }
+            ],
 
             subject: "Hospital Appointment Confirmation",
 
-            html: `
+            htmlContent: `
                 <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto; border:1px solid #ddd; border-radius:10px; overflow:hidden;">
                     <div style="background:#2563eb; color:white; padding:20px; text-align:center;">
                         <h2>🏥 Hospital Appointment Confirmation</h2>
@@ -95,11 +85,8 @@ async function sendAppointmentEmail(appointment) {
 
         });
 
-        console.log("After sendMail");
-
         console.log("==================================");
         console.log("✅ Appointment Email Sent");
-        console.log(info.messageId);
         console.log("==================================");
 
         return {
@@ -125,15 +112,25 @@ async function sendAppointmentCancelledEmail(appointment) {
 
     try {
 
-        const info = await transporter.sendMail({
+        await apiInstance.sendTransacEmail({
 
-            from: process.env.EMAIL_USER,
+            sender: {
+                name: "Hospital Management System",
 
-            to: appointment.patientEmail,
+                email: process.env.EMAIL_USER
+            },
+
+            to: [
+                {
+                    email: appointment.patientEmail,
+
+                    name: appointment.patient
+                }
+            ],
 
             subject: "Hospital Appointment Cancelled",
 
-            html: `
+            htmlContent: `
                 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
 
                     <div style="background:#dc2626;color:white;padding:20px;text-align:center;">
@@ -183,7 +180,6 @@ async function sendAppointmentCancelledEmail(appointment) {
 
         console.log("==================================");
         console.log("✅ Appointment Cancelled Email Sent");
-        console.log(info.messageId);
         console.log("==================================");
 
         return { success: true };
@@ -205,15 +201,25 @@ async function sendAppointmentCompletedEmail(appointment) {
 
     try {
 
-        const info = await transporter.sendMail({
+        await apiInstance.sendTransacEmail({
 
-            from: process.env.EMAIL_USER,
+            sender: {
+                name: "Hospital Management System",
 
-            to: appointment.patientEmail,
+                email: process.env.EMAIL_USER
+            },
+
+            to: [
+                {
+                    email: appointment.patientEmail,
+
+                    name: appointment.patient
+                }
+            ],
 
             subject: "Consultation Completed",
 
-            html: `
+            htmlContent: `
                 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
 
                     <div style="background:#16a34a;color:white;padding:20px;text-align:center;">
@@ -257,7 +263,6 @@ async function sendAppointmentCompletedEmail(appointment) {
 
         console.log("==================================");
         console.log("✅ Appointment Completed Email Sent");
-        console.log(info.messageId);
         console.log("==================================");
 
         return { success: true };
@@ -279,15 +284,25 @@ async function sendPatientAdmittedEmail(patient) {
 
     try {
 
-        const info = await transporter.sendMail({
+        await apiInstance.sendTransacEmail({
 
-            from: process.env.EMAIL_USER,
+            sender: {
+                name: "Hospital Management System",
 
-            to: patient.email,
+                email: process.env.EMAIL_USER
+            },
+
+            to: [
+                {
+                    email: appointment.patientEmail,
+
+                    name: appointment.patient
+                }
+            ],
 
             subject: "Patient Admission Confirmation",
 
-            html: `
+            htmlContent: `
                 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
 
                     <div style="background:#2563eb;color:white;padding:20px;text-align:center;">
@@ -354,7 +369,6 @@ async function sendPatientAdmittedEmail(patient) {
 
         console.log("==================================");
         console.log("✅ Admission Email Sent");
-        console.log(info.messageId);
         console.log("==================================");
 
         return {
@@ -380,15 +394,25 @@ async function sendPatientDischargedEmail(patient) {
 
     try {
 
-        const info = await transporter.sendMail({
+        await apiInstance.sendTransacEmail({
 
-            from: process.env.EMAIL_USER,
+            sender: {
+                name: "Hospital Management System",
 
-            to: patient.email,
+                email: process.env.EMAIL_USER
+            },
+
+            to: [
+                {
+                    email: appointment.patientEmail,
+
+                    name: appointment.patient
+                }
+            ],
 
             subject: "Patient Discharge Confirmation",
 
-            html: `
+            htmlContent: `
                 <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #ddd;border-radius:10px;overflow:hidden;">
 
                     <div style="background:#16a34a;color:white;padding:20px;text-align:center;">
@@ -464,7 +488,6 @@ async function sendPatientDischargedEmail(patient) {
 
         console.log("==================================");
         console.log("✅ Discharge Email Sent");
-        console.log(info.messageId);
         console.log("==================================");
 
         return {
