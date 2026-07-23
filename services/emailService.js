@@ -10,7 +10,7 @@ async function sendAppointmentEmail(appointment) {
 
     try {
 
-        await client.sendTransactionalEmails.sendTransacEmail({
+        await client.transactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -109,7 +109,7 @@ async function sendAppointmentCancelledEmail(appointment) {
 
     try {
 
-        await client.sendTransactionalEmails.sendTransacEmail({
+        await client.transactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -198,7 +198,7 @@ async function sendAppointmentCompletedEmail(appointment) {
 
     try {
 
-        await client.sendTransactionalEmails.sendTransacEmail({
+        await client.transactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -281,7 +281,7 @@ async function sendPatientAdmittedEmail(patient) {
 
     try {
 
-        await client.sendTransactionalEmails.sendTransacEmail({
+        await client.transactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -391,7 +391,7 @@ async function sendPatientDischargedEmail(patient) {
 
     try {
 
-        await client.sendTransactionalEmails.sendTransacEmail({
+        await client.transactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
