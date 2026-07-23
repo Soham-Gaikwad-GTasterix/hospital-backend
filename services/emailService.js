@@ -1,6 +1,6 @@
 const { BrevoClient } = require("@getbrevo/brevo");
 
-const client = new brevo.BrevoClient({
+const client = new BrevoClient({
     apiKey: process.env.BREVO_API_KEY,
 });
 
@@ -10,7 +10,7 @@ async function sendAppointmentEmail(appointment) {
 
     try {
 
-        await client.smtpTemplates.sendTransacEmail({
+        await client.sendTransactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -109,7 +109,7 @@ async function sendAppointmentCancelledEmail(appointment) {
 
     try {
 
-        await client.smtpTemplates.sendTransacEmail({
+        await client.sendTransactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -198,7 +198,7 @@ async function sendAppointmentCompletedEmail(appointment) {
 
     try {
 
-        await client.smtpTemplates.sendTransacEmail({
+        await client.sendTransactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -281,7 +281,7 @@ async function sendPatientAdmittedEmail(patient) {
 
     try {
 
-        await client.smtpTemplates.sendTransacEmail({
+        await client.sendTransactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -291,9 +291,9 @@ async function sendPatientAdmittedEmail(patient) {
 
             to: [
                 {
-                    email: appointment.patientEmail,
+                    email: patient.email,
 
-                    name: appointment.patient
+                    name: patient.name
                 }
             ],
 
@@ -391,7 +391,7 @@ async function sendPatientDischargedEmail(patient) {
 
     try {
 
-        await client.smtpTemplates.sendTransacEmail({
+        await client.sendTransactionalEmails.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -401,9 +401,9 @@ async function sendPatientDischargedEmail(patient) {
 
             to: [
                 {
-                    email: appointment.patientEmail,
+                    email: patient.email,
 
-                    name: appointment.patient
+                    name: patient.name
                 }
             ],
 
