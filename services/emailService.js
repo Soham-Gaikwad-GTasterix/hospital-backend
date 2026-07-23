@@ -1,9 +1,8 @@
 const brevo = require("@getbrevo/brevo");
 
-const apiInstance = new brevo.TransactionalEmailsApi();
-
-apiInstance.authentications["apiKey"]
-.apiKey = process.env.BREVO_API_KEY
+const client = new brevo.BrevoClient({
+    apiKey: process.env.BREVO_API_KEY,
+});
 
 console.log("✅ Brevo Email Service Ready");
 
@@ -11,7 +10,7 @@ async function sendAppointmentEmail(appointment) {
 
     try {
 
-        await apiInstance.sendTransacEmail({
+        await client.smtpTemplates.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -110,7 +109,7 @@ async function sendAppointmentCancelledEmail(appointment) {
 
     try {
 
-        await apiInstance.sendTransacEmail({
+        await client.smtpTemplates.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -199,7 +198,7 @@ async function sendAppointmentCompletedEmail(appointment) {
 
     try {
 
-        await apiInstance.sendTransacEmail({
+        await client.smtpTemplates.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -282,7 +281,7 @@ async function sendPatientAdmittedEmail(patient) {
 
     try {
 
-        await apiInstance.sendTransacEmail({
+        await client.smtpTemplates.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
@@ -392,7 +391,7 @@ async function sendPatientDischargedEmail(patient) {
 
     try {
 
-        await apiInstance.sendTransacEmail({
+        await client.smtpTemplates.sendTransacEmail({
 
             sender: {
                 name: "Hospital Management System",
