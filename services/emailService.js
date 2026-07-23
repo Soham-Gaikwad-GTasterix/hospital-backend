@@ -21,6 +21,10 @@ async function sendAppointmentEmail(appointment) {
 
     try {
 
+        console.log("EMAIL_USER:",process.env.EMAIL_USER);
+        console.log("EMAIL_PASS loded:", !! process.env.EMAIL_PASS);
+        console.log("Recipient:",appointment.patientEmail);
+
         const info = await transporter.sendMail({
 
             from: process.env.EMAIL_USER,
